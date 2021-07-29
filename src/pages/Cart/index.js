@@ -7,10 +7,34 @@ import {
 } from 'react-icons/md';
 
 import { formatPrice } from '../../util/format';
+import {
+  fifa,
+  mario,
+  warfare,
+  wwii,
+  horizon,
+  mortal,
+  witcher,
+  darknessshard,
+  sombras,
+} from "../../assets";
 
 import * as CartActions from '../../store/modules/cart/actions';
 
 import { Container, ProductTable, Total } from './styles';
+
+function handleImagePath(image) {
+  if (image === "super-mario-odyssey.png") return mario;
+  if (image === "call-of-duty-infinite-warfare.png") return warfare;
+  if (image === "fifa-18.png") return fifa;
+  if (image === "call-of-duty-wwii.png") return wwii;
+  if (image === "horizon-zero-dawn.png") return horizon;
+  if (image === "mortal-kombat-xl.png") return mortal;
+  if (image === "the-witcher-iii-wild-hunt.png") return witcher;
+  if (image === "shards-of-darkness.png") return darknessshard;
+  if (image === "terra-media-sombras-de-mordor.png") return sombras;
+}
+
 import { bindActionCreators } from 'redux';
 
 function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
@@ -20,6 +44,13 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
 
   function decrement(product) {
     updateAmountRequest(product.id, product.amount - 1);
+  }
+
+  function CalculateFrete(total, cart) {
+    if (total * cart >= 250 ) return "Frete gratís";
+
+
+    return formatPrice(cart * 10);
   }
 
   return (
@@ -32,16 +63,18 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
             <th>QTD</th>
             <th>SUBTOTAL</th>
             <th />
+            <th>Frete</th>
+            <th />
           </tr>
         </thead>
         <tbody>
           {cart.map(product => (
             <tr>
               <td>
-                <img src={product.image} alt={product.title} />
+              <img src={handleImagePath(product.image)} alt={product.name} />
               </td>
               <td>
-                <strong>{product.title}</strong>
+                <strong>{product.name}</strong>
                 <span>{product.priceFormatted}</span>
               </td>
               <td>
@@ -57,8 +90,10 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
               </td>
               <td>
                 <strong>{product.subtotal}</strong>
+
               </td>
               <td>
+
                 <button
                   type="button"
                   onClick={() =>
@@ -66,6 +101,9 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
                   <MdDelete size={20} color="#7159c1" />
                 </button>
               </td>
+              <td>
+                <section>{CalculateFrete(product.price, product.amount)}</section>
+                </td>
             </tr>
           ))}
         </tbody>
@@ -91,6 +129,7 @@ const mapStateToProps = state => ({
   total: formatPrice(state.cart.reduce((total, product) => {
     return total + product.price * product.amount;
   }, 0)),
+  frete: formatPrice()
 });
 
 const mapDispatchToProps = dispatch =>

@@ -4,6 +4,17 @@ import { bindActionCreators } from 'redux';
 import { MdAddShoppingCart } from 'react-icons/md';
 import { formatPrice } from '../../util/format';
 import api from '../../services/api';
+import {
+  fifa,
+  mario,
+  warfare,
+  wwii,
+  horizon,
+  mortal,
+  witcher,
+  darknessshard,
+  sombras,
+} from "../../assets";
 
 import * as CartActions from '../../store/modules/cart/actions';
 
@@ -35,12 +46,24 @@ class Home extends Component {
     const { products } = this.state;
     const { amount } = this.props;
 
+    function handleImagePath(image) {
+      if (image === "super-mario-odyssey.png") return mario;
+      if (image === "call-of-duty-infinite-warfare.png") return warfare;
+      if (image === "fifa-18.png") return fifa;
+      if (image === "call-of-duty-wwii.png") return wwii;
+      if (image === "horizon-zero-dawn.png") return horizon;
+      if (image === "mortal-kombat-xl.png") return mortal;
+      if (image === "the-witcher-iii-wild-hunt.png") return witcher;
+      if (image === "shards-of-darkness.png") return darknessshard;
+      if (image === "terra-media-sombras-de-mordor.png") return sombras;
+    }
+
     return (
       <ProductList>
         {products.map(product => (
-          <li key={product.id}>
-            <img src={product.image} alt={product.title} />
-            <strong>{product.title}</strong>
+          <li key={product.name}>
+          <img src={handleImagePath(product.image)} alt={product.name} />
+            <strong>{product.name}</strong>
             <span>{product.priceFormatted}</span>
 
             <button
